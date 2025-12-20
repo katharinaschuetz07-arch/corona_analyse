@@ -10,7 +10,7 @@
     
     <style>
         :root {
-            /* System-Schriftarten für maximale KompatibilitÃ¤t */
+            /* System-Schriftarten für maximale Kompatibilität */
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         body { 
@@ -37,13 +37,13 @@
             Analyse: 666 Tage
         </h1>
         <div class="h-1 w-20 bg-red-600 mx-auto rounded-full"></div>
-        <p class="text-slate-400 mt-4 font-light tracking-wide uppercase text-xs">Corona-MaÃŸnahmen & Symbolik</p>
+        <p class="text-slate-400 mt-4 font-light tracking-wide uppercase text-xs">Corona-Maßnahmen & Symbolik</p>
     </header>
 
     <main class="w-full max-w-lg space-y-6">
         
         <div class="card p-6 rounded-3xl shadow-2xl">
-            <label for="stateSelect" class="block text-sm font-semibold mb-3 text-slate-300">Region auswÃ¤hlen</label>
+            <label for="stateSelect" class="block text-sm font-semibold mb-3 text-slate-300">Region auswählen</label>
             <select id="stateSelect" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white appearance-none focus:ring-2 focus:ring-red-500 transition-all cursor-pointer shadow-inner">
                 <option value="">Wähle ein Bundesland...</option>
             </select>
@@ -69,7 +69,8 @@
                 </div>
 
                 <div class="bg-slate-900/80 p-5 rounded-2xl border-l-4 border-red-600">
-                    <h3 class="text-xs font-bold text-red-500 mb-2 tracking-widest uppercase">Ereignis-Analyse</h3>
+                    <h3 class="text-xs font-bold text-red-500 mb-2 tracking-widest uppercase">Ereignis-Analyse</h3><br>
+                    Version 1.23
                     <p id="eventDescription" class="text-slate-300 text-sm leading-relaxed font-medium"></p>
                 </div>
             </div>
@@ -83,12 +84,12 @@
     <script>
         // Datenbank mit korrekten Umlauten
         const data = {
-            "Baden-Württemberg": { start: "27.04.2020", d666: "21.02.2022", event: "Umsetzung der Lockerungsstufen basierend auf dem MPK-Plan. Privilegierung fÃ¼r Geimpfte und Genesene tritt in Kraft." },
+            "Baden-Württemberg": { start: "27.04.2020", d666: "21.02.2022", event: "Umsetzung der Lockerungsstufen basierend auf dem MPK-Plan. Privilegierung für Geimpfte und Genesene tritt in Kraft." },
             "Bayern": { start: "27.04.2020", d666: "21.02.2022", event: "Inkrafttreten der 15. BayIfSMV am 22.02.22: VollstÃ¤ndige Aufhebung der Kontaktbeschränkungen für Geimpfte/Genesene." },
-            "Berlin": { start: "27.04.2020", d666: "21.02.2022", event: "Senatsbeschluss am 22.02.22: Wegfall aller KontaktbeschrÃ¤nkungen fÃ¼r Personen mit 2G-Status." },
+            "Berlin": { start: "27.04.2020", d666: "21.02.2022", event: "Senatsbeschluss am 22.02.22: Wegfall aller KontaktbeschrÃ¤nkungen für Personen mit 2G-Status." },
             "Brandenburg": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Verordnung am 22.02.22: Erste Lockerungsstufe erlaubt unbegrenzte Treffen für Geimpfte/Genesene gemäß § 6." },
-            "Hamburg": { start: "27.04.2020", d666: "21.02.2022", event: "Senat beschließt am 22.02.22 weitreichende Freiheiten fÃ¼r Geimpfte/Genesene nach exakt 666 Tagen." },
-            "Hessen": { start: "27.04.2020", d666: "21.02.2022", event: "Verkündung der neuen Schutzverordnung: Kontaktverbote fallen fÃ¼r Geimpfte und Genesene vollständig weg." },
+            "Hamburg": { start: "27.04.2020", d666: "21.02.2022", event: "Senat beschließt am 22.02.22 weitreichende Freiheiten für Geimpfte/Genesene nach exakt 666 Tagen." },
+            "Hessen": { start: "27.04.2020", d666: "21.02.2022", event: "Verkündung der neuen Schutzverordnung: Kontaktverbote fallen für Geimpfte und Genesene vollständig weg." },
             "Mecklenburg-Vorpommern": { start: "27.04.2020", d666: "21.02.2022", event: "Landtag beschließt am 21.02.22 (Tag 666) den großen Öffnungsplan für Personen mit Immunitätsnachweis." },
             "Nordrhein-Westfalen": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Coronaschutzverordnung am 22.02.22: Volle Freiheit für Geimpfte/Genesene bei privaten Zusammenkünften." },
             "Sachsen": { start: "20.04.2020", d666: "14.02.2022", event: "Vorbereitung der neuen Notfall-Verordnung zur Privilegierung von Geimpften/Genesenen punktgenau am 666. Tag." },
@@ -100,7 +101,7 @@
         const select = document.getElementById('stateSelect');
         const resultDiv = document.getElementById('result');
 
-        // Dropdown fÃ¼llen
+        // Dropdown fällen
         Object.keys(data).sort().forEach(state => {
             const option = document.createElement('option');
             option.value = state;
