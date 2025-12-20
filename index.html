@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronik 666 - Analyse Tool</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* System-Schriftarten fÃ¼r maximale KompatibilitÃ¤t */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body { 
+            background-color: #020617; 
+            color: #f8fafc;
+            font-family: var(--font-sans);
+            -webkit-font-smoothing: antialiased;
+        }
+        .card { 
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        select {
+            /* Verhindert Zoom-In bei iPhone-Eingabe */
+            font-size: 16px !important;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 flex flex-col items-center min-h-screen">
+
+    <header class="w-full max-w-lg text-center mt-6 mb-10">
+        <h1 class="text-4xl font-extrabold tracking-tighter mb-2 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">
+            Analyse: 666 Tage
+        </h1>
+        <div class="h-1 w-20 bg-red-600 mx-auto rounded-full"></div>
+        <p class="text-slate-400 mt-4 font-light tracking-wide uppercase text-xs">Corona-MaÃŸnahmen & Symbolik</p>
+    </header>
+
+    <main class="w-full max-w-lg space-y-6">
+        
+        <div class="card p-6 rounded-3xl shadow-2xl">
+            <label for="stateSelect" class="block text-sm font-semibold mb-3 text-slate-300">Region auswÃ¤hlen</label>
+            <select id="stateSelect" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white appearance-none focus:ring-2 focus:ring-red-500 transition-all cursor-pointer shadow-inner">
+                <option value="">WÃ¤hle ein Bundesland...</option>
+            </select>
+        </div>
+
+        <div id="result" class="hidden transform transition-all duration-500 translate-y-4">
+            <div class="card p-8 rounded-3xl shadow-2xl space-y-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor text-red-500"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                </div>
+
+                <h2 id="stateName" class="text-3xl font-extrabold text-white leading-tight"></h2>
+                
+                <div class="grid grid-cols-2 gap-4 pt-4">
+                    <div class="bg-slate-800/50 p-4 rounded-2xl">
+                        <span class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1">Start Pflicht</span>
+                        <span id="startDate" class="text-lg font-semibold text-slate-200"></span>
+                    </div>
+                    <div class="bg-red-950/30 border border-red-900/50 p-4 rounded-2xl">
+                        <span class="block text-[10px] uppercase tracking-widest text-red-500 mb-1">666. Tag</span>
+                        <span id="day666" class="text-lg font-bold text-red-400"></span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 p-5 rounded-2xl border-l-4 border-red-600">
+                    <h3 class="text-xs font-bold text-red-500 mb-2 tracking-widest uppercase">Ereignis-Analyse</h3>
+                    <p id="eventDescription" class="text-slate-300 text-sm leading-relaxed font-medium"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-auto py-8 text-[10px] text-slate-600 tracking-[0.2em] uppercase">
+        Multi-Platform Interface | Version 2.1
+    </footer>
+
+    <script>
+        // Datenbank mit korrekten Umlauten
+        const data = {
+            "Baden-WÃ¼rttemberg": { start: "27.04.2020", d666: "21.02.2022", event: "Umsetzung der Lockerungsstufen basierend auf dem MPK-Plan. Privilegierung fÃ¼r Geimpfte und Genesene tritt in Kraft." },
+            "Bayern": { start: "27.04.2020", d666: "21.02.2022", event: "Inkrafttreten der 15. BayIfSMV am 22.02.22: VollstÃ¤ndige Aufhebung der KontaktbeschrÃ¤nkungen fÃ¼r Geimpfte/Genesene." },
+            "Berlin": { start: "27.04.2020", d666: "21.02.2022", event: "Senatsbeschluss am 22.02.22: Wegfall aller KontaktbeschrÃ¤nkungen fÃ¼r Personen mit 2G-Status." },
+            "Brandenburg": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Verordnung am 22.02.22: Erste Lockerungsstufe erlaubt unbegrenzte Treffen fÃ¼r Geimpfte/Genesene gemÃ¤ÃŸ Â§ 6." },
+            "Hamburg": { start: "27.04.2020", d666: "21.02.2022", event: "Senat beschlieÃŸt am 22.02.22 weitreichende Freiheiten fÃ¼r Geimpfte/Genesene nach exakt 666 Tagen." },
+            "Hessen": { start: "27.04.2020", d666: "21.02.2022", event: "VerkÃ¼ndung der neuen Schutzverordnung: Kontaktverbote fallen fÃ¼r Geimpfte und Genesene vollstÃ¤ndig weg." },
+            "Mecklenburg-Vorpommern": { start: "27.04.2020", d666: "21.02.2022", event: "Landtag beschlieÃŸt am 21.02.22 (Tag 666) den groÃŸen Ã–ffnungsplan fÃ¼r Personen mit ImmunitÃ¤tsnachweis." },
+            "Nordrhein-Westfalen": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Coronaschutzverordnung am 22.02.22: Volle Freiheit fÃ¼r Geimpfte/Genesene bei privaten ZusammenkÃ¼nften." },
+            "Sachsen": { start: "20.04.2020", d666: "14.02.2022", event: "Vorbereitung der neuen Notfall-Verordnung zur Privilegierung von Geimpften/Genesenen punktgenau am 666. Tag." },
+            "Sachsen-Anhalt": { start: "27.04.2020", d666: "21.02.2022", event: "Beschluss der 15. EindÃ¤mmungsverordnung: Aufhebung der Personenobergrenzen fÃ¼r Geimpfte/Genesene." },
+            "Schleswig-Holstein": { start: "29.04.2020", d666: "23.02.2022", event: "Lockerungsschritte folgen unmittelbar auf den 666. Tag nach EinfÃ¼hrung der landesweiten Maskenpflicht." },
+            "ThÃ¼ringen": { start: "24.04.2020", d666: "18.02.2022", event: "Inkrafttreten der Lockerungen: Unbegrenzte Freiheit fÃ¼r Geimpfte/Genesene exakt am 666. Tag der ZÃ¤hlung." }
+        };
+
+        const select = document.getElementById('stateSelect');
+        const resultDiv = document.getElementById('result');
+
+        // Dropdown fÃ¼llen
+        Object.keys(data).sort().forEach(state => {
+            const option = document.createElement('option');
+            option.value = state;
+            option.textContent = state;
+            select.appendChild(option);
+        });
+
+        select.addEventListener('change', (e) => {
+            const state = e.target.value;
+            if (state) {
+                document.getElementById('stateName').textContent = state;
+                document.getElementById('startDate').textContent = data[state].start;
+                document.getElementById('day666').textContent = data[state].d666;
+                document.getElementById('eventDescription').textContent = data[state].event;
+                
+                resultDiv.classList.remove('hidden');
+                resultDiv.classList.add('translate-y-0', 'opacity-100');
+            } else {
+                resultDiv.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
