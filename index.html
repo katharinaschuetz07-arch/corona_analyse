@@ -10,7 +10,7 @@
     
     <style>
         :root {
-            /* System-Schriftarten fÃ¼r maximale KompatibilitÃ¤t */
+            /* System-Schriftarten für maximale KompatibilitÃ¤t */
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         body { 
@@ -83,18 +83,18 @@
     <script>
         // Datenbank mit korrekten Umlauten
         const data = {
-            "Baden-WÃ¼rttemberg": { start: "27.04.2020", d666: "21.02.2022", event: "Umsetzung der Lockerungsstufen basierend auf dem MPK-Plan. Privilegierung fÃ¼r Geimpfte und Genesene tritt in Kraft." },
-            "Bayern": { start: "27.04.2020", d666: "21.02.2022", event: "Inkrafttreten der 15. BayIfSMV am 22.02.22: VollstÃ¤ndige Aufhebung der KontaktbeschrÃ¤nkungen fÃ¼r Geimpfte/Genesene." },
+            "Baden-Württemberg": { start: "27.04.2020", d666: "21.02.2022", event: "Umsetzung der Lockerungsstufen basierend auf dem MPK-Plan. Privilegierung fÃ¼r Geimpfte und Genesene tritt in Kraft." },
+            "Bayern": { start: "27.04.2020", d666: "21.02.2022", event: "Inkrafttreten der 15. BayIfSMV am 22.02.22: VollstÃ¤ndige Aufhebung der Kontaktbeschränkungen für Geimpfte/Genesene." },
             "Berlin": { start: "27.04.2020", d666: "21.02.2022", event: "Senatsbeschluss am 22.02.22: Wegfall aller KontaktbeschrÃ¤nkungen fÃ¼r Personen mit 2G-Status." },
-            "Brandenburg": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Verordnung am 22.02.22: Erste Lockerungsstufe erlaubt unbegrenzte Treffen fÃ¼r Geimpfte/Genesene gemÃ¤ÃŸ Â§ 6." },
-            "Hamburg": { start: "27.04.2020", d666: "21.02.2022", event: "Senat beschlieÃŸt am 22.02.22 weitreichende Freiheiten fÃ¼r Geimpfte/Genesene nach exakt 666 Tagen." },
-            "Hessen": { start: "27.04.2020", d666: "21.02.2022", event: "VerkÃ¼ndung der neuen Schutzverordnung: Kontaktverbote fallen fÃ¼r Geimpfte und Genesene vollstÃ¤ndig weg." },
-            "Mecklenburg-Vorpommern": { start: "27.04.2020", d666: "21.02.2022", event: "Landtag beschlieÃŸt am 21.02.22 (Tag 666) den groÃŸen Ã–ffnungsplan fÃ¼r Personen mit ImmunitÃ¤tsnachweis." },
-            "Nordrhein-Westfalen": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Coronaschutzverordnung am 22.02.22: Volle Freiheit fÃ¼r Geimpfte/Genesene bei privaten ZusammenkÃ¼nften." },
+            "Brandenburg": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Verordnung am 22.02.22: Erste Lockerungsstufe erlaubt unbegrenzte Treffen für Geimpfte/Genesene gemäß § 6." },
+            "Hamburg": { start: "27.04.2020", d666: "21.02.2022", event: "Senat beschließt am 22.02.22 weitreichende Freiheiten fÃ¼r Geimpfte/Genesene nach exakt 666 Tagen." },
+            "Hessen": { start: "27.04.2020", d666: "21.02.2022", event: "Verkündung der neuen Schutzverordnung: Kontaktverbote fallen fÃ¼r Geimpfte und Genesene vollständig weg." },
+            "Mecklenburg-Vorpommern": { start: "27.04.2020", d666: "21.02.2022", event: "Landtag beschließt am 21.02.22 (Tag 666) den großen Öffnungsplan für Personen mit Immunitätsnachweis." },
+            "Nordrhein-Westfalen": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Coronaschutzverordnung am 22.02.22: Volle Freiheit für Geimpfte/Genesene bei privaten Zusammenkünften." },
             "Sachsen": { start: "20.04.2020", d666: "14.02.2022", event: "Vorbereitung der neuen Notfall-Verordnung zur Privilegierung von Geimpften/Genesenen punktgenau am 666. Tag." },
-            "Sachsen-Anhalt": { start: "27.04.2020", d666: "21.02.2022", event: "Beschluss der 15. EindÃ¤mmungsverordnung: Aufhebung der Personenobergrenzen fÃ¼r Geimpfte/Genesene." },
-            "Schleswig-Holstein": { start: "29.04.2020", d666: "23.02.2022", event: "Lockerungsschritte folgen unmittelbar auf den 666. Tag nach EinfÃ¼hrung der landesweiten Maskenpflicht." },
-            "ThÃ¼ringen": { start: "24.04.2020", d666: "18.02.2022", event: "Inkrafttreten der Lockerungen: Unbegrenzte Freiheit fÃ¼r Geimpfte/Genesene exakt am 666. Tag der ZÃ¤hlung." }
+            "Sachsen-Anhalt": { start: "27.04.2020", d666: "21.02.2022", event: "Beschluss der 15. Eindämmungsverordnung: Aufhebung der Personenobergrenzen für Geimpfte/Genesene." },
+            "Schleswig-Holstein": { start: "29.04.2020", d666: "23.02.2022", event: "Lockerungsschritte folgen unmittelbar auf den 666. Tag nach Einführung der landesweiten Maskenpflicht." },
+            "Thüringen": { start: "24.04.2020", d666: "18.02.2022", event: "Inkrafttreten der Lockerungen: Unbegrenzte Freiheit für Geimpfte/Genesene exakt am 666. Tag der Zählung." }
         };
 
         const select = document.getElementById('stateSelect');
