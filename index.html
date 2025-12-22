@@ -3,127 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chronik 666 - Analyse Tool</title>
-    
+    <title>Corona-Chronik Ostdeutschland & Berlin</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            /* System-Schriftarten für maximale Kompatibilität */
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        body { 
-            background-color: #020617; 
-            color: #f8fafc;
-            font-family: var(--font-sans);
-            -webkit-font-smoothing: antialiased;
-        }
-        .card { 
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        select {
-            /* Verhindert Zoom-In bei iPhone-Eingabe */
-            font-size: 16px !important;
-        }
+        body { background-color: #050505; color: #e2e8f0; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .font-header { font-family: 'Orbitron', sans-serif; }
+        .glass-card { background: rgba(15, 15, 15, 0.95); border: 1px solid #222; box-shadow: 0 0 50px rgba(0,0,0,1); }
+        .btn-action { background: linear-gradient(45deg, #600, #b00); transition: all 0.3s ease; }
+        .btn-action:hover { filter: brightness(1.3); transform: translateY(-2px); }
+        .death-box { background: #0f0f0f; border: 1px solid #333; }
+        h1, h2, h3, span, button, select { text-transform: none !important; }
+        .uppercase-custom { text-transform: uppercase !important; } 
     </style>
 </head>
-<body class="p-4 sm:p-8 flex flex-col items-center min-h-screen">
+<body class="p-3 md:p-10 min-h-screen flex flex-col items-center">
 
-    <header class="w-full max-w-lg text-center mt-6 mb-10">
-        <h1 class="text-4xl font-extrabold tracking-tighter mb-2 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">
-            Analyse: 666 Tage
-        </h1>
-        <div class="h-1 w-20 bg-red-600 mx-auto rounded-full"></div>
-        <p class="text-slate-400 mt-4 font-light tracking-wide uppercase text-xs">Corona-Maßnahmen & Symbolik</p>
-        <p class="text-slate-400 mt-4 font-light tracking-wide uppercase text-xs">Version 1.71 </p>
+<header id="mainHeader" class="w-full max-w-4xl text-center mb-8">
+    <h1 class="font-header text-2xl md:text-4xl lg:text-5xl font-black mb-2 tracking-tighter text-white leading-tight">
+        Chronik der Corona-Maßnahmen in Ostdeutschland
+    </h1>
+    <p class="text-red-600 font-bold uppercase-custom tracking-[0.3em] text-[10px] md:text-xs opacity-80">Version 1.8.0</p>
+</header>
 
-    </header>
+<main class="w-full max-w-3xl flex-grow">
+    <div id="selectionArea" class="mb-6">
+        <select id="stateSelect" class="w-full bg-neutral-900 border-2 border-neutral-800 rounded-2xl p-4 text-white font-bold outline-none focus:border-red-600 cursor-pointer shadow-2xl appearance-none">
+            <option value="">-- Bundesland wählen --</option>
+            <option value="Berlin">Berlin</option>
+            <option value="Brandenburg">Brandenburg</option>
+            <option value="Sachsen">Sachsen</option>
+            <option value="Sachsen-Anhalt">Sachsen-Anhalt</option>
+            <option value="Thüringen">Thüringen</option>
+            <option value="Mecklenburg-Vorpommern">Mecklenburg-Vorpommern</option>
+        </select>
+    </div>
 
-    <main class="w-full max-w-lg space-y-6">
-        
-        <div class="card p-6 rounded-3xl shadow-2xl">
-            <label for="stateSelect" class="block text-sm font-semibold mb-3 text-slate-300">Hier kannst Du die Region auswählen</label>
-            <select id="stateSelect" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white appearance-none focus:ring-2 focus:ring-red-500 transition-all cursor-pointer shadow-inner">
-                <option value="">Wähle ein Bundesland...</option>
-            </select>
-        </div>
+    <div id="content" class="hidden w-full">
+        <div class="glass-card p-5 md:p-12 rounded-[2.5rem] md:rounded-[4rem] relative overflow-hidden border-t-2 border-red-600 shadow-2xl">
+            <div id="progress" class="absolute top-0 left-0 h-1 bg-red-600 transition-all duration-700"></div>
+            
+            <div class="flex justify-between items-center mb-6 md:mb-10">
+                <span id="stateLabel" class="font-header text-[11px] md:text-sm font-black text-red-600 tracking-widest uppercase-custom"></span>
+                <span id="stepCounter" class="text-[10px] font-mono text-slate-500 bg-black px-3 py-1 rounded-full border border-slate-800 uppercase-custom"></span>
+            </div>
 
-        <div id="result" class="hidden transform transition-all duration-500 translate-y-4">
-            <div class="card p-8 rounded-3xl shadow-2xl space-y-6 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10">
-                    <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor text-red-500"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <div id="eventDisplay" class="min-h-[360px] flex flex-col justify-between">
+                <div>
+                    <h2 id="dateDisplay" class="text-5xl md:text-7xl font-extrabold text-white mb-2 tracking-tighter"></h2>
+                    <div id="dayDiff" class="text-[10px] font-bold text-red-700 tracking-wider mb-6 md:mb-8 uppercase-custom"></div>
+                    <h3 id="titleDisplay" class="text-2xl md:text-4xl font-extrabold text-white leading-tight mb-4"></h3>
+                    <p id="textDisplay" class="text-slate-400 text-base md:text-xl leading-relaxed font-normal"></p>
                 </div>
-
-                <h2 id="stateName" class="text-3xl font-extrabold text-white leading-tight"></h2>
                 
-                <div class="grid grid-cols-2 gap-4 pt-4">
-                    <div class="bg-slate-800/50 p-4 rounded-2xl">
-                        <span class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1">Start Pflicht</span>
-                        <span id="startDate" class="text-lg font-semibold text-slate-200"></span>
-                    </div>
-                    <div class="bg-red-950/30 border border-red-900/50 p-4 rounded-2xl">
-                        <span class="block text-[10px] uppercase tracking-widest text-red-500 mb-1">666. Tag</span>
-                        <span id="day666" class="text-lg font-bold text-red-400"></span>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900/80 p-5 rounded-2xl border-l-4 border-red-600">
-                    <h3 class="text-xs font-bold text-red-500 mb-2 tracking-widest uppercase">Ereignis-Analyse</h3>
-                    <p id="eventDescription" class="text-slate-300 text-sm leading-relaxed font-medium"></p>
+                <div class="pt-6 mt-6 border-t border-neutral-900">
+                    <span class="text-[10px] text-slate-600 block font-bold mb-1 tracking-wider uppercase-custom italic">Verordnung</span>
+                    <div id="lawDisplay" class="text-[11px] md:text-sm font-mono text-red-500/80 font-bold"></div>
                 </div>
             </div>
+
+            <div id="statsDisplay" class="hidden">
+                <h3 class="font-header text-xl md:text-3xl font-black text-white mb-8 text-center uppercase-custom">Statistische Bilanz</h3>
+                <div class="grid grid-cols-3 gap-2 md:gap-4 mb-8" id="deathGrid"></div>
+                <div class="bg-neutral-900/80 p-5 md:p-8 rounded-3xl border border-neutral-800 mb-6 text-center">
+                    <p class="text-[11px] text-red-600 font-bold uppercase-custom mb-2 italic">Dauer der Maskenpflicht</p>
+                    <div id="maskDuration" class="text-4xl md:text-6xl font-black text-white mb-1"></div>
+                    <p id="maskPeriod" class="text-[10px] md:text-xs text-slate-500 font-mono"></p>
+                </div>
+                <div class="p-4 bg-red-950/10 border border-red-900/20 rounded-xl text-center">
+                    <p id="statSpeech" class="text-[11px] md:text-base text-slate-400 italic font-medium leading-snug"></p>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-3 mt-8 md:mt-12">
+                <button onclick="change(-1)" class="order-2 md:order-1 flex-1 py-3 text-slate-500 font-bold text-xs tracking-wider hover:text-white transition-all">Zurück</button>
+                <button id="nextBtn" onclick="change(1)" class="order-1 md:order-2 flex-[2] py-4 md:py-5 rounded-2xl font-black text-sm md:text-base tracking-wider text-white btn-action shadow-xl">Weiter</button>
+            </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <footer class="mt-auto py-8 text-[10px] text-slate-600 tracking-[0.2em] uppercase">
-        Multi-Platform Interface | Version 1.71
-    </footer>
+<footer class="w-full max-w-3xl mt-12 pb-8 px-4 text-center">
+    <div class="h-px w-full bg-gradient-to-r from-transparent via-neutral-800 to-transparent mb-6"></div>
+    <p class="text-[10px] md:text-xs text-slate-500 leading-relaxed font-light italic">
+        Diese Info-App wurde mit Hilfe einer KI und Daten aus dem Internet zusammengestellt. Sie dient der historischen Dokumentation der Maßnahmenzeiträume in Ostdeutschland.
+    </p>
+</footer>
 
-    <script>
-        // Datenbank mit korrekten Umlauten
-        const data = {
-            "Baden-Württemberg": { start: "27.04.2020", d666: "21.02.2022", event: "Umsetzung der Lockerungsstufen basierend auf dem MPK-Plan. Privilegierung für Geimpfte und Genesene tritt in Kraft." },
-            "Bayern": { start: "27.04.2020", d666: "21.02.2022", event: "Inkrafttreten der 15. BayIfSMV am 22.02.22: VollstÃ¤ndige Aufhebung der Kontaktbeschränkungen für Geimpfte/Genesene." },
-            "Berlin": { start: "27.04.2020", d666: "21.02.2022", event: "Senatsbeschluss am 22.02.22: Wegfall aller KontaktbeschrÃ¤nkungen für Personen mit 2G-Status." },
-            "Brandenburg": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Verordnung am 22.02.22: Erste Lockerungsstufe erlaubt unbegrenzte Treffen für Geimpfte/Genesene gemäß § 6." },
-            "Hamburg": { start: "27.04.2020", d666: "21.02.2022", event: "Senat beschließt am 22.02.22 weitreichende Freiheiten für Geimpfte/Genesene nach exakt 666 Tagen." },
-            "Hessen": { start: "27.04.2020", d666: "21.02.2022", event: "Verkündung der neuen Schutzverordnung: Kontaktverbote fallen für Geimpfte und Genesene vollständig weg." },
-            "Mecklenburg-Vorpommern": { start: "27.04.2020", d666: "21.02.2022", event: "Landtag beschließt am 21.02.22 (Tag 666) den großen Öffnungsplan für Personen mit Immunitätsnachweis." },
-            "Nordrhein-Westfalen": { start: "27.04.2020", d666: "21.02.2022", event: "Neue Coronaschutzverordnung am 22.02.22: Volle Freiheit für Geimpfte/Genesene bei privaten Zusammenkünften." },
-            "Sachsen": { start: "20.04.2020", d666: "14.02.2022", event: "Vorbereitung der neuen Notfall-Verordnung zur Privilegierung von Geimpften/Genesenen punktgenau am 666. Tag." },
-            "Sachsen-Anhalt": { start: "27.04.2020", d666: "21.02.2022", event: "Beschluss der 15. Eindämmungsverordnung: Aufhebung der Personenobergrenzen für Geimpfte/Genesene." },
-            "Schleswig-Holstein": { start: "29.04.2020", d666: "23.02.2022", event: "Lockerungsschritte folgen unmittelbar auf den 666. Tag nach Einführung der landesweiten Maskenpflicht." },
-            "Thüringen": { start: "24.04.2020", d666: "18.02.2022", event: "Inkrafttreten der Lockerungen: Unbegrenzte Freiheit für Geimpfte/Genesene exakt am 666. Tag der Zählung." }
-        };
+<script>
+const covidData = {
+    "Berlin": {
+        mStart: "27.04.2020", mEnd: "02.02.2023",
+        deaths: { "2019": "36.909", "2020": "38.822", "2023": "39.400" },
+        events: [
+            { d: "14.03.2020", t: "Club-Aus & Kneipenverbot", v: "EindV Berlin", txt: "Berlins Nachtleben wird eingestellt. Bars und Clubs müssen schließen.", s: "März zweitausendzwanzig. Berlins Clubs schlossen zuerst." },
+            { d: "23.03.2020", t: "Ausgangsbeschränkung", v: "SARS-CoV-2-EindV", txt: "Wohnung verlassen nur mit triftigem Grund erlaubt.", s: "März. Berlin erlässt Ausgangsbeschränkungen." },
+            { d: "27.04.2020", t: "Maskenpflicht ÖPNV", v: "InfSchVO", txt: "Start der Maskenpflicht in Bussen und Bahnen.", s: "April. Die Maske wird im Nahverkehr Pflicht." },
+            { d: "05.09.2020", t: "Maskenpflicht bei Demos", v: "InfSchVO", txt: "Pflicht zur Mund-Nasen-Bedeckung bei Versammlungen im Freien.", s: "September. Maskenpflicht bei Demonstrationen." },
+            { d: "16.12.2020", t: "Harter Winter-Lockdown", v: "InfSchVO", txt: "Schließung fast aller Geschäfte über den Jahreswechsel.", s: "Dezember. Harter Lockdown in Berlin." },
+            { d: "24.04.2021", t: "Bundesnotbremse", v: "IfSG Bund", txt: "Nächtliche Ausgangssperre von 22 bis 5 Uhr.", s: "April einundzwanzig. Nächtliche Ausgangssperren." },
+            { d: "15.11.2021", t: "Einführung 2G", v: "Verschärfung", txt: "Zutritt zu Gastro und Kinos nur für Geimpfte/Genesene.", s: "November. Berlin führt die zweigee Regel ein." },
+            { d: "15.01.2022", t: "2G-Plus Regelung", v: "InfSchVO", txt: "Zusätzlicher Test für Geimpfte in der Gastronomie.", s: "Januar zweiundzwanzig. Einführung von zweigee plus." },
+            { d: "01.04.2022", t: "Wegfall Masken Handel", v: "IfSG", txt: "Maskenpflicht im Einzelhandel endet, bleibt aber im ÖPNV.", s: "April. Die Maskenpflicht im Handel fällt." },
+            { d: "02.02.2023", t: "Ende Maskenpflicht ÖPNV", v: "Senat", txt: "Berlin beendet die Maskenpflicht in Bus und Bahn.", s: "Februar dreiundzwanzig. Die Maskenpflicht endet komplett." }
+        ]
+    },
+    "Brandenburg": {
+        mStart: "27.04.2020", mEnd: "03.04.2022",
+        deaths: { "2019": "31.912", "2020": "33.918", "2023": "37.100" },
+        events: [
+            { d: "12.03.2020", t: "Großveranstaltungsstopp", v: "Erlass", txt: "Verbot von Veranstaltungen über 1000 Personen.", s: "März zwanzig. Großveranstaltungen untersagt." },
+            { d: "18.03.2020", t: "Erster Lockdown", v: "SARS-CoV-2-EindV", txt: "Schulen und Kitas werden flächendeckend geschlossen.", s: "Erster Lockdown beginnt." },
+            { d: "27.04.2020", t: "Einführung Maskenpflicht", v: "EindV BB", txt: "Maskenpflicht in Geschäften und im Nahverkehr.", s: "April. Maskenpflicht wird eingeführt." },
+            { d: "16.12.2020", t: "Harter Lockdown", v: "3. EindV", txt: "Geschäftsschließungen über den Jahreswechsel.", s: "Dezember. Ein harter Lockdown folgt." },
+            { d: "27.12.2020", t: "Beginn der Impfungen", v: "B-ImpfV", txt: "Start in Brandenburger Seniorenheimen.", s: "Dezember. Impfstart in Brandenburg." },
+            { d: "19.04.2021", t: "Ausgangssperren", v: "7. EindV", txt: "Nächtliche Beschränkungen bei Inzidenz über 100.", s: "April einundzwanzig. Nächtliche Ausgangssperren." },
+            { d: "28.08.2021", t: "3G-Regel Standard", v: "UmgangsV", txt: "Zutritt nur für Geimpfte, Genesene oder Getestete.", s: "August. Dreigee Regel wird Standard." },
+            { d: "15.11.2021", t: "2G in der Gastronomie", v: "EindV", txt: "Ausschluss Ungeimpfter aus Innenräumen.", s: "November. Zweigee Regel tritt in Kraft." },
+            { d: "24.11.2021", t: "2G-Plus & Testpflicht", v: "EindV", txt: "Tests auch für Geimpfte bei Veranstaltungen.", s: "November. Zweigee plus folgt." },
+            { d: "03.04.2022", t: "Ende der Maßnahmen", v: "IfSG", txt: "Wegfall der meisten Regeln und der Maskenpflicht.", s: "April zweiundzwanzig. Die Maßnahmen enden." }
+        ]
+    },
+    "Sachsen": {
+        mStart: "20.04.2020", mEnd: "03.04.2022",
+        deaths: { "2019": "54.545", "2020": "60.450", "2023": "62.800" },
+        events: [
+            { d: "23.03.2020", t: "Harte Ausgangssperre", v: "AllgM", txt: "Verlassen der Wohnung nur bei triftigem Grund.", s: "März zwanzig. Sachsen erlässt Ausgangssperre." },
+            { d: "20.04.2020", t: "Erste Maskenpflicht bundesweit", v: "VO", txt: "Sachsen führt als erstes Land die Maskenpflicht ein.", s: "Sachsen startet die erste Maskenpflicht." },
+            { d: "14.12.2020", t: "Harter Hotspot-Lockdown", v: "VO", txt: "Schulen und Kitas schließen vorzeitig.", s: "Dezember. Harter Lockdown wegen hoher Zahlen." },
+            { d: "01.04.2021", t: "Testpflicht Einzelhandel", v: "VO", txt: "Einkaufen nur mit offiziellem Testergebnis.", s: "April. Testpflicht für den Handel." },
+            { d: "01.09.2021", t: "3G-Einführung", v: "VO", txt: "Regelungen für Veranstaltungen in Innenräumen.", s: "September. Dreigee Regel beginnt." },
+            { d: "08.11.2021", t: "Flächendeckend 2G", v: "VO", txt: "Ungeimpfte verlieren Zutritt zu öffentlichem Raum.", s: "November. Harte zweigee Pflicht." },
+            { d: "22.11.2021", t: "Teil-Lockdown", v: "Notfall-VO", txt: "Schließung von Bars und Kultureinrichtungen.", s: "November. Erneuter Teil Lockdown." },
+            { d: "14.01.2022", t: "2G-Plus in Gastronomie", v: "VO", txt: "Zusätzliche Tests auch für Geimpfte.", s: "Januar zweiundzwanzig. Zweigee plus wird Pflicht." },
+            { d: "03.04.2022", t: "Ende Maßnahmen", v: "IfSG", txt: "Wegfall fast aller sächsischen Corona-Regeln.", s: "April. Die Maßnahmen enden." }
+        ]
+    },
+    "Mecklenburg-Vorpommern": {
+        mStart: "27.04.2020", mEnd: "28.04.2022",
+        deaths: { "2019": "20.210", "2020": "21.150", "2023": "23.200" },
+        events: [
+            { d: "16.03.2020", t: "Sperrung der Ostseeinseln", v: "Erlass", txt: "Touristen dürfen die Inseln nicht mehr betreten.", s: "März zwanzig. Inseln gesperrt." },
+            { d: "23.03.2020", t: "Einreiseverbot Touristen", v: "LVO", txt: "Gäste aus anderen Ländern dürfen nicht einreisen.", s: "März. Einreiseverbot für Touristen." },
+            { d: "27.04.2020", t: "Maskenpflicht Start", v: "LVO", txt: "Pflicht zur Bedeckung in Geschäften.", s: "April. Die Maske wird zur Pflicht." },
+            { d: "24.04.2021", t: "Landesweite Ausgangssperre", v: "LVO", txt: "Nächtliches Verbot von 21 bis 6 Uhr.", s: "April einundzwanzig. Ausgangssperre in M Vau." },
+            { d: "23.08.2021", t: "3G-System Ampel", v: "Ampel-LVO", txt: "Zutritt je nach Ampelstatus geregelt.", s: "August. Dreigee System eingeführt." },
+            { d: "01.12.2021", t: "2G-Plus Pflicht", v: "Ampel-LVO", txt: "Geimpfte müssen sich zusätzlich testen lassen.", s: "Dezember. Zweigee plus wird Pflicht." },
+            { d: "15.12.2021", t: "Clubschließungen", v: "LVO", txt: "Diskotheken müssen erneut schließen.", s: "Dezember. Clubs wieder zu." },
+            { d: "31.03.2022", t: "Hotspot-Regelung", v: "Landtag", txt: "Maßnahmen werden über Bundesfrist verlängert.", s: "März zweiundzwanzig. Verlängerung als Hotspot." },
+            { d: "28.04.2022", t: "Ende Maskenpflicht", v: "LVO", txt: "Maskenpflicht im Einzelhandel fällt endlich.", s: "April. Die Maskenpflicht endet." }
+        ]
+    },
+    "Thüringen": {
+        mStart: "24.04.2020", mEnd: "02.04.2022",
+        deaths: { "2019": "28.510", "2020": "30.800", "2023": "32.150" },
+        events: [
+            { d: "13.03.2020", t: "Landesweite Schulschließung", v: "Erlass", txt: "Erste Schließung aller Bildungseinrichtungen.", s: "März zwanzig. Schulen geschlossen." },
+            { d: "24.04.2020", t: "Start Maskenpflicht", v: "VO", txt: "Mundschutz im Einzelhandel und ÖPNV.", s: "April. Maskenpflicht beginnt." },
+            { d: "10.01.2021", t: "Einschränkung Bewegungsradius", v: "VO", txt: "Limitierung auf 15 Kilometer um den Wohnort.", s: "Januar einundzwanzig. Fünfzehn Kilometer Radius." },
+            { d: "23.08.2021", t: "Einführung 3G-Regel", v: "Basis-VO", txt: "Nachweis für Veranstaltungen erforderlich.", s: "August. Dreigee Regel eingeführt." },
+            { d: "15.11.2021", t: "Harte 2G-Vorgaben", v: "Warnstufe", txt: "Zutritt nur für Geimpfte und Genesene.", s: "November. Zweigee Regel tritt in Kraft." },
+            { d: "24.11.2021", t: "2G-Plus & Testung", v: "Warnstufe 3", txt: "Zusätzliche Tests in vielen öffentlichen Bereichen.", s: "November. Zweigee plus folgt." },
+            { d: "02.04.2022", t: "Ende Maßnahmen", v: "IfSG", txt: "Wegfall der meisten Schutzregeln.", s: "April zweiundzwanzig. Maßnahmen enden." }
+        ]
+    },
+    "Sachsen-Anhalt": {
+        mStart: "23.04.2020", mEnd: "02.04.2022",
+        deaths: { "2019": "30.410", "2020": "32.100", "2023": "34.500" },
+        events: [
+            { d: "16.03.2020", t: "Schließung Kultur & Sport", v: "EindV", txt: "Sämtliche Freizeiteinrichtungen werden geschlossen.", s: "März zwanzig. Sport und Kultur zu." },
+            { d: "23.04.2020", t: "Maskenpflicht Einführung", v: "3. EindV", txt: "Bedeckung in Geschäften und Nahverkehr.", s: "April. Maskenpflicht beginnt." },
+            { d: "15.12.2020", t: "Harter Lockdown", v: "EindV", txt: "Verschärfte Maßnahmen über Weihnachten.", s: "Dezember. Harter Lockdown." },
+            { d: "23.08.2021", t: "Start 3G-Regel", v: "14. EindV", txt: "Testpflicht für Innenräume eingeführt.", s: "August einundzwanzig. Dreigee Regel beginnt." },
+            { d: "24.11.2021", t: "Flächendeckend 2G", v: "15. EindV", txt: "Zutrittsbeschränkungen für Ungeimpfte.", s: "November. Zweigee Regel wird Pflicht." },
+            { d: "15.12.2021", t: "2G-Plus Testung", v: "EindV", txt: "Verschärfung für Großveranstaltungen.", s: "Dezember. Zweigee plus eingeführt." },
+            { d: "02.04.2022", t: "Ende Maßnahmen", v: "Basisschutz", txt: "Maskenpflicht im Handel wird beendet.", s: "April zweiundzwanzig. Maßnahmen enden." }
+        ]
+    }
+};
 
-        const select = document.getElementById('stateSelect');
-        const resultDiv = document.getElementById('result');
+let currentS = ""; let currentIdx = 0; let isStatsMode = false;
+const sel = document.getElementById("stateSelect");
+const nextBtn = document.getElementById("nextBtn");
+const selectionArea = document.getElementById("selectionArea");
+const contentArea = document.getElementById("content");
 
-        // Dropdown fällen
-        Object.keys(data).sort().forEach(state => {
-            const option = document.createElement('option');
-            option.value = state;
-            option.textContent = state;
-            select.appendChild(option);
+sel.onchange = () => {
+    if(!sel.value) return;
+    currentS = sel.value; currentIdx = 0; isStatsMode = false;
+    selectionArea.classList.add("hidden"); contentArea.classList.remove("hidden");
+    updateUI();
+};
+
+function updateUI() {
+    const state = covidData[currentS];
+    const eventSection = document.getElementById("eventDisplay");
+    const statsSection = document.getElementById("statsDisplay");
+    document.getElementById("stateLabel").textContent = currentS;
+    document.getElementById("stepCounter").textContent = isStatsMode ? "Bilanz" : `${currentIdx + 1} / ${state.events.length}`;
+    document.getElementById("progress").style.width = isStatsMode ? "100%" : ((currentIdx + 1) / state.events.length * 100) + "%";
+
+    if (isStatsMode) {
+        eventSection.classList.add("hidden"); statsSection.classList.remove("hidden");
+        const days = Math.round((parseDate(state.mEnd) - parseDate(state.mStart)) / 86400000);
+        document.getElementById("maskDuration").textContent = `${days} Tage`;
+        document.getElementById("maskPeriod").textContent = `${state.mStart} bis ${state.mEnd}`;
+        const grid = document.getElementById("deathGrid");
+        grid.innerHTML = "";
+        ["2019", "2020", "2023"].forEach(year => {
+            grid.innerHTML += `
+                <div class="death-box p-3 rounded-2xl text-center">
+                    <span class="block text-[9px] text-slate-500 font-bold mb-1 uppercase-custom">${year === '2019' ? 'Referenz' : year}</span>
+                    <span class="text-sm md:text-base font-black ${year === '2019' ? 'text-white' : 'text-red-600'}">${state.deaths[year]}</span>
+                </div>`;
         });
+        const summary = `Bilanz für ${currentS}. Die Maskenpflicht bestand ${days} Tage.`;
+        document.getElementById("statSpeech").textContent = summary;
+        nextBtn.textContent = "Neustart";
+        speak(summary);
+    } else {
+        eventSection.classList.remove("hidden"); statsSection.classList.add("hidden");
+        const ev = state.events[currentIdx];
+        document.getElementById("dateDisplay").textContent = ev.d;
+        document.getElementById("titleDisplay").textContent = ev.t;
+        document.getElementById("textDisplay").textContent = ev.txt;
+        document.getElementById("lawDisplay").textContent = ev.v;
+        const diff = Math.round((parseDate(ev.d) - parseDate(state.mStart)) / 86400000);
+        document.getElementById("dayDiff").textContent = diff === 0 ? "Start der Maskenpflicht" : (diff < 0 ? `${Math.abs(diff)} Tage davor` : `${diff} Tage danach`);
+        nextBtn.textContent = (currentIdx === state.events.length - 1) ? "Zur Bilanz" : "Weiter";
+        speak(ev.s);
+    }
+}
 
-        select.addEventListener('change', (e) => {
-            const state = e.target.value;
-            if (state) {
-                document.getElementById('stateName').textContent = state;
-                document.getElementById('startDate').textContent = data[state].start;
-                document.getElementById('day666').textContent = data[state].d666;
-                document.getElementById('eventDescription').textContent = data[state].event;
-                
-                resultDiv.classList.remove('hidden');
-                resultDiv.classList.add('translate-y-0', 'opacity-100');
-            } else {
-                resultDiv.classList.add('hidden');
-            }
-        });
-    </script>
+function change(n) {
+    if (!currentS) return;
+    if (isStatsMode && n > 0) { 
+        currentS = ""; isStatsMode = false; currentIdx = 0; sel.value = "";
+        contentArea.classList.add("hidden"); selectionArea.classList.remove("hidden");
+        window.speechSynthesis.cancel(); return; 
+    }
+    if (n > 0 && currentIdx === covidData[currentS].events.length - 1 && !isStatsMode) { isStatsMode = true; }
+    else if (n < 0 && isStatsMode) { isStatsMode = false; }
+    else if (n < 0 && currentIdx === 0) {
+        currentS = ""; sel.value = ""; contentArea.classList.add("hidden"); selectionArea.classList.remove("hidden");
+        window.speechSynthesis.cancel(); return;
+    }
+    else {
+        currentIdx += n;
+        if(currentIdx < 0) currentIdx = 0;
+        if(currentIdx >= covidData[currentS].events.length) currentIdx = covidData[currentS].events.length - 1;
+    }
+    updateUI();
+}
+
+function parseDate(s) { const b = s.split(/\./); return new Date(b[2], b[1]-1, b[0]); }
+function speak(t) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'de-DE'; u.rate = 1.0; window.speechSynthesis.speak(u); }
+</script>
 </body>
 </html>
+
